@@ -4,23 +4,19 @@ class DFA {
         this.alphabets = structure.alphabets;
         this.startingState = structure['start-state'];
         this.finalStates = structure['final-states'];
-        this.deltaFunctions = structure.delta;
+        this.transitions = structure.delta;
     };
 
-    getNextState(currentState, alphabet){
-        return this.deltaFunctions[currentState][alphabet];
+    applyTransition(currentState, alphabet){
+        return this.transitions[currentState][alphabet];
     };
 
-    isAcceptable(state){
-        return this.finalStates.includes(state);
-    };
-
-    getLastState(pattern){
-        return pattern.split("").reduce((currentState, alphabet) => this.getNextState(currentState, alphabet), this.startingState);
+    process(pattern){
+        return pattern.split("").reduce((currentState, alphabet) => this.applyTransition(currentState, alphabet), this.startingState);
     };
 
     doesAccept(pattern){
-        return this.isAcceptable(this.getLastState(pattern));
+        return this.finalStates.includes(this.process(pattern));
     };
 };
 
